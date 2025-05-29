@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recall</title>
+        <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+        button { padding: 10px 20px; }
+        .game { margin-top: 10px; }
+        </style>
+</head>
+<body>
+<h1>
+    NBA Scores
+</h1>
+<button onclick="fetchNBAScores()">Load Scores</button>
+<div id="scoresNBA"></div>
+
+<script>
+    async function fetchNBAScores() {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/nba/scores');
+      const data = await response.json();
+
+      console.log('API response:', data);
+      const container = document.getElementById('scoresNBA');
+      container.innerHTML = '';
+
+      if (!data.games || !Array.isArray(data.games)) {
+        container.innerHTML = 'No games found or API format error.';
+        return;
+      }
+
+      data.games.forEach(game => {
+        const div = document.createElement('div');
+        div.className = 'game';
+        div.innerHTML = `
+          <strong>${game.away}</strong> (${game.awayScore}) vs
+          <strong>${game.home}</strong> (${game.homeScore})<br>
+          Status: ${game.status}<br>
+          Start Time: ${new Date(game.startTime).toLocaleString()}
+        `;
+        container.appendChild(div);
+      });
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      document.getElementById('scoresNBA').innerText = 'Error loading scores.';
+    }
+  }
+</script>
+
+<h1>
+    MLB Scores
+</h1>
+<button onclick="fetchMLBScores()">Load Scores</button>
+<div id="scoresMLB"></div>
+
+<script>
+    async function fetchMLBScores() {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/mlb/scores');
+      const data = await response.json();
+
+      console.log('API response:', data);
+      const container = document.getElementById('scoresMLB');
+      container.innerHTML = '';
+
+      if (!data.games || !Array.isArray(data.games)) {
+        container.innerHTML = 'No games found or API format error.';
+        return;
+      }
+
+      data.games.forEach(game => {
+        const div = document.createElement('div');
+        div.className = 'game';
+        div.innerHTML = `
+          <strong>${game.away}</strong> (${game.awayScore}) vs
+          <strong>${game.home}</strong> (${game.homeScore})<br>
+          Status: ${game.status}<br>
+          Start Time: ${new Date(game.startTime).toLocaleString()}
+        `;
+        container.appendChild(div);
+      });
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      document.getElementById('scoresMLB').innerText = 'Error loading scores.';
+    }
+  }
+</script>
+
+</body>
+</html>
